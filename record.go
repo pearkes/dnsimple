@@ -99,9 +99,17 @@ func (c *Client) UpdateRecord(domain string, id string, opts *ChangeRecord) (str
 	// Make the request parameters
 	params := make(map[string]interface{})
 
-	params["name"] = opts.Name
-	params["record_type"] = opts.Type
-	params["content"] = opts.Value
+	if opts.Name != "" {
+		params["name"] = opts.Name
+	}
+
+	if opts.Type != "" {
+		params["record_type"] = opts.Type
+	}
+
+	if opts.Value != "" {
+		params["content"] = opts.Value
+	}
 
 	if opts.Ttl != "" {
 		ttl, err := strconv.ParseInt(opts.Ttl, 0, 0)
