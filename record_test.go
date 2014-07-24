@@ -81,7 +81,7 @@ func (s *S) Test_CreateRecord_fail(c *C) {
 func (s *S) Test_RetrieveRecord(c *C) {
 	testServer.Response(200, nil, recordExample)
 
-	record, err := s.client.RetrieveRecord("25")
+	record, err := s.client.RetrieveRecord("example.com", "25")
 
 	_ = testServer.WaitRequest()
 

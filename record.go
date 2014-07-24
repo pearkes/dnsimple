@@ -159,9 +159,9 @@ func (c *Client) DestroyRecord(id string) error {
 // RetrieveRecord gets  a record by the ID specified and
 // returns a Record and an error. An error will be returned for failed
 // requests with a nil Record.
-func (c *Client) RetrieveRecord(id string) (Record, error) {
+func (c *Client) RetrieveRecord(domain string, id string) (Record, error) {
 	var body map[string]interface{}
-	req, err := c.NewRequest(body, "GET", fmt.Sprintf("/records/%s", id))
+	req, err := c.NewRequest(body, "GET", fmt.Sprintf("/domains/%s/records/%s", domain, id))
 
 	if err != nil {
 		return Record{}, err
