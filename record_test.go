@@ -86,7 +86,7 @@ func (s *S) Test_RetrieveRecord(c *C) {
 	_ = testServer.WaitRequest()
 
 	c.Assert(err, IsNil)
-	c.Assert(record.StringDomainId(), Equals, "28")
+	c.Assert(record.StringId(), Equals, "25")
 	c.Assert(record.StringDomainId(), Equals, "28")
 	c.Assert(record.StringTtl(), Equals, "3600")
 	c.Assert(record.Name, Equals, "foobar")

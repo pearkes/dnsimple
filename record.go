@@ -171,14 +171,14 @@ func (c *Client) RetrieveRecord(domain string, id string) (*Record, error) {
 		return nil, fmt.Errorf("Error retrieving record: %s", err)
 	}
 
-	var record Record
+	recordResp := RecordResponse{}
 
-	err = decodeBody(resp, &record)
+	err = decodeBody(resp, &recordResp)
 
 	if err != nil {
 		return nil, fmt.Errorf("Error decoding record response: %s", err)
 	}
 
 	// The request was successful
-	return &record, nil
+	return &recordResp.Record, nil
 }
