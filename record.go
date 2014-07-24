@@ -138,9 +138,9 @@ func (c *Client) UpdateRecord(domain string, id string, opts *ChangeRecord) (str
 // DestroyRecord destroys a record by the ID specified and
 // returns an error if it fails. If no error is returned,
 // the Record was succesfully destroyed.
-func (c *Client) DestroyRecord(id string) error {
+func (c *Client) DestroyRecord(domain string, id string) error {
 	var body map[string]interface{}
-	req, err := c.NewRequest(body, "DELETE", fmt.Sprintf("/records/%s", id))
+	req, err := c.NewRequest(body, "DELETE", fmt.Sprintf("/domains/%s/records/%s", domain, id))
 
 	if err != nil {
 		return err
