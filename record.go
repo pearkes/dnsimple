@@ -41,9 +41,9 @@ func (r *Record) StringTtl() string {
 	return strconv.FormatInt(r.Ttl, 10)
 }
 
-// CreateRecord contains the request parameters to create a new
+// ChangeRecord contains the request parameters to create or update a
 // record.
-type CreateRecord struct {
+type ChangeRecord struct {
 	Name  string // name of the record
 	Value string // where the record points
 	Type  string // type, i.e a, mx
@@ -53,7 +53,49 @@ type CreateRecord struct {
 // CreateRecord creates a record from the parameters specified and
 // returns an error if it fails. If no error and an ID is returned,
 // the Record was succesfully created.
-func (c *Client) CreateRecord(domain string, opts *CreateRecord) (string, error) {
+func (c *Client) CreateRecord(domain string, opts *ChangeRecord) (string, error) {
+	// Make the request parameters
+	params := make(map[string]interface{})
+
+	params["name"] = opts.Name
+	params["record_type"] = opts.Type
+	params["content"] = opts.Value
+
+	if opts.Ttl != "" {
+		ttl, err := strconv.ParseInt(opts.Ttl, 0, 0)
+		if err != nil {
+			return "", nil
+		}
+		params["ttl"] = ttl
+	}
+
+	endpoint := fmt.Sprintf("/domains/%s/records", domain)
+
+	req, err := c.NewRequest(params, "POST", endpoint)
+	if err != nil {
+		return "", err
+	}
+
+	resp, err := checkResp(c.Http.Do(req))
+	if err != nil {
+		return "", fmt.Errorf("Error creating record: %s", err)
+	}
+
+	record := new(RecordResponse)
+
+	err = decodeBody(resp, &record)
+
+	if err != nil {
+		return "", fmt.Errorf("Error parsing record response: %s", err)
+	}
+
+	// The request was successful
+	return record.Record.StringId(), nil
+}
+
+// UpdateRecord updated a record from the parameters specified and
+// returns an error if it fails.
+func (c *Client) UpdateRecord(domain string, opts *ChangeRecord) (string, error) {
 	// Make the request parameters
 	params := make(map[string]interface{})
 

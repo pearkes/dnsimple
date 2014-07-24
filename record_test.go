@@ -37,7 +37,7 @@ func (s *S) TearDownTest(c *C) {
 func (s *S) Test_CreateRecord(c *C) {
 	testServer.Response(202, nil, recordExample)
 
-	opts := CreateRecord{
+	opts := ChangeRecord{
 		Name: "foobar",
 	}
 
@@ -52,7 +52,7 @@ func (s *S) Test_CreateRecord(c *C) {
 func (s *S) Test_CreateRecord_fail(c *C) {
 	testServer.Response(400, nil, recordExampleError)
 
-	opts := CreateRecord{
+	opts := ChangeRecord{
 		Name: "foobar",
 	}
 
