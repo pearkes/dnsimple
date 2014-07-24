@@ -120,7 +120,7 @@ func (c *Client) UpdateRecord(domain string, id string, opts *ChangeRecord) (str
 
 	resp, err := checkResp(c.Http.Do(req))
 	if err != nil {
-		return "", fmt.Errorf("Error creating record: %s", err)
+		return "", fmt.Errorf("Error updating record: %s", err)
 	}
 
 	record := new(RecordResponse)
@@ -159,27 +159,26 @@ func (c *Client) DestroyRecord(domain string, id string) error {
 // RetrieveRecord gets  a record by the ID specified and
 // returns a Record and an error. An error will be returned for failed
 // requests with a nil Record.
-func (c *Client) RetrieveRecord(domain string, id string) (Record, error) {
+func (c *Client) RetrieveRecord(domain string, id string) (*Record, error) {
 	var body map[string]interface{}
 	req, err := c.NewRequest(body, "GET", fmt.Sprintf("/domains/%s/records/%s", domain, id))
-
 	if err != nil {
-		return Record{}, err
+		return nil, err
 	}
 
 	resp, err := checkResp(c.Http.Do(req))
 	if err != nil {
-		return Record{}, fmt.Errorf("Error destroying record: %s", err)
+		return nil, fmt.Errorf("Error retrieving record: %s", err)
 	}
 
-	record := new(RecordResponse)
+	var record Record
 
-	err = decodeBody(resp, record)
+	err = decodeBody(resp, &record)
 
 	if err != nil {
-		return Record{}, fmt.Errorf("Error decoding record response: %s", err)
+		return nil, fmt.Errorf("Error decoding record response: %s", err)
 	}
 
 	// The request was successful
-	return record.Record, nil
+	return &record, nil
 }
