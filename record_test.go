@@ -49,6 +49,21 @@ func (s *S) Test_CreateRecord(c *C) {
 	c.Assert(id, Equals, "25")
 }
 
+func (s *S) Test_UpdateRecord(c *C) {
+	testServer.Response(200, nil, recordExample)
+
+	opts := ChangeRecord{
+		Name: "foobar",
+	}
+
+	id, err := s.client.UpdateRecord("example.com", "25", &opts)
+
+	_ = testServer.WaitRequest()
+
+	c.Assert(err, IsNil)
+	c.Assert(id, Equals, "25")
+}
+
 func (s *S) Test_CreateRecord_fail(c *C) {
 	testServer.Response(400, nil, recordExampleError)
 

@@ -95,7 +95,7 @@ func (c *Client) CreateRecord(domain string, opts *ChangeRecord) (string, error)
 
 // UpdateRecord updated a record from the parameters specified and
 // returns an error if it fails.
-func (c *Client) UpdateRecord(domain string, opts *ChangeRecord) (string, error) {
+func (c *Client) UpdateRecord(domain string, id string, opts *ChangeRecord) (string, error) {
 	// Make the request parameters
 	params := make(map[string]interface{})
 
@@ -111,9 +111,9 @@ func (c *Client) UpdateRecord(domain string, opts *ChangeRecord) (string, error)
 		params["ttl"] = ttl
 	}
 
-	endpoint := fmt.Sprintf("/domains/%s/records", domain)
+	endpoint := fmt.Sprintf("/domains/%s/records/%s", domain, id)
 
-	req, err := c.NewRequest(params, "POST", endpoint)
+	req, err := c.NewRequest(params, "PUT", endpoint)
 	if err != nil {
 		return "", err
 	}
