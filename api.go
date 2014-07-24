@@ -141,12 +141,14 @@ func checkResp(resp *http.Response, err error) (*http.Response, error) {
 	switch i := resp.StatusCode; {
 	case i == 200:
 		return resp, nil
+	case i == 201:
+		return resp, nil
 	case i == 202:
 		return resp, nil
 	case i == 204:
 		return resp, nil
 	case i == 422:
-		return nil, parseErr(resp)
+		return nil, fmt.Errorf("API Error: %s", resp.Status)
 	case i == 400:
 		return nil, parseErr(resp)
 	default:
