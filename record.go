@@ -190,3 +190,22 @@ func (c *Client) RetrieveRecord(domain string, id string) (*Record, error) {
 	// The request was successful
 	return &recordResp.Record, nil
 }
+
+// GetRecords retrieves all the records for the given domain.
+func (c *Client) GetRecords(domain string) ([]RecordResponse, error) {
+	req, err := c.NewRequest(nil, "GET", "/domains/"+domain+"/records")
+	if err != nil {
+		return nil, err
+	}
+	resp, err := c.Http.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	records := make([]RecordResponse, 10)
+	err = decode(resp.Body, &records)
+	if err != nil {
+		return nil, err
+	}
+	return records, nil
+}
