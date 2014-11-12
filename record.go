@@ -192,7 +192,7 @@ func (c *Client) RetrieveRecord(domain string, id string) (*Record, error) {
 }
 
 // GetRecords retrieves all the records for the given domain.
-func (c *Client) GetRecords(domain string) ([]RecordResponse, error) {
+func (c *Client) GetRecords(domain string) ([]Record, error) {
 	req, err := c.NewRequest(nil, "GET", "/domains/"+domain+"/records")
 	if err != nil {
 		return nil, err
@@ -202,10 +202,14 @@ func (c *Client) GetRecords(domain string) ([]RecordResponse, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	records := make([]RecordResponse, 10)
-	err = decode(resp.Body, &records)
+	recordResponses := make([]RecordResponse, 10)
+	err = decode(resp.Body, &recordResponses)
 	if err != nil {
 		return nil, err
+	}
+	records := make([]Record, len(recordResponses))
+	for i, rr := range recordResponses {
+		records[i] = rr.Record
 	}
 	return records, nil
 }

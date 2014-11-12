@@ -7,7 +7,7 @@ import (
 )
 
 // GetDomains retrieves all the domains for a given account.
-func (c *Client) GetDomains() ([]DomainResponse, error) {
+func (c *Client) GetDomains() ([]Domain, error) {
 	req, err := c.NewRequest(nil, "GET", "/domains")
 	if err != nil {
 		return nil, err
@@ -17,10 +17,14 @@ func (c *Client) GetDomains() ([]DomainResponse, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	domains := []DomainResponse{}
-	err = decode(resp.Body, &domains)
+	domainResponses := []DomainResponse{}
+	err = decode(resp.Body, &domainResponses)
 	if err != nil {
 		return nil, err
+	}
+	domains := make([]Domain, len(domainResponses))
+	for i, dr := range domainResponses {
+		domains[i] = dr.Domain
 	}
 	return domains, nil
 }
