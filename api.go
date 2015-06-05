@@ -19,6 +19,9 @@ type Client struct {
 	// User Email
 	Email string
 
+	// Domain Token
+	DomainToken string
+
 	// URL to the DO API to use
 	URL string
 
@@ -57,6 +60,15 @@ func NewClient(email string, token string) (*Client, error) {
 	return &client, nil
 }
 
+func NewClientWithDomainToken(domainToken string) (*Client, error) {
+	client := Client{
+		DomainToken: domainToken,
+		URL:         "https://api.dnsimple.com/v1",
+		Http:        http.DefaultClient,
+	}
+	return &client, nil
+}
+
 // Creates a new request with the params
 func (c *Client) NewRequest(body map[string]interface{}, method string, endpoint string) (*http.Request, error) {
 	u, err := url.Parse(c.URL + endpoint)
@@ -77,7 +89,11 @@ func (c *Client) NewRequest(body map[string]interface{}, method string, endpoint
 	}
 
 	// Add the authorization header
-	req.Header.Add("X-DNSimple-Token", fmt.Sprintf("%s:%s", c.Email, c.Token))
+	if c.DomainToken != "" {
+		req.Header.Add("X-DNSimple-Domain-Token", c.DomainToken)
+	} else {
+		req.Header.Add("X-DNSimple-Token", fmt.Sprintf("%s:%s", c.Email, c.Token))
+	}
 	req.Header.Add("Accept", "application/json")
 
 	// If it's a not a get, add a content-type
