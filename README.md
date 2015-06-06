@@ -1,6 +1,6 @@
 ## dnsimple
 
-![](https://api.travis-ci.org/pearkes/dnsimple.svg?branch=master)
+[![](https://api.travis-ci.org/pearkes/dnsimple.svg?branch=master)](https://travis-ci.org/pearkes/dnsimple)
 
 This package provides the `dnsimple` package which offers
 an interface to the DNSimple API.
