@@ -25,8 +25,8 @@ type Client struct {
 	// URL to the DO API to use
 	URL string
 
-	// HttpClient is the client to use. Default will be
-	// used if not provided.
+	// HttpClient is the client to use. A client with
+	// default values will be used if not provided.
 	Http *http.Client
 }
 
@@ -55,7 +55,7 @@ func NewClient(email string, token string) (*Client, error) {
 		Token: token,
 		Email: email,
 		URL:   "https://api.dnsimple.com/v1",
-		Http:  http.DefaultClient,
+		Http:  &http.Client{},
 	}
 	return &client, nil
 }
@@ -64,7 +64,7 @@ func NewClientWithDomainToken(domainToken string) (*Client, error) {
 	client := Client{
 		DomainToken: domainToken,
 		URL:         "https://api.dnsimple.com/v1",
-		Http:        http.DefaultClient,
+		Http:        &http.Client{},
 	}
 	return &client, nil
 }
