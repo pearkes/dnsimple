@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/hashicorp/cleanhttp"
 )
 
 // Client provides a client to the DNSimple API
@@ -55,7 +57,7 @@ func NewClient(email string, token string) (*Client, error) {
 		Token: token,
 		Email: email,
 		URL:   "https://api.dnsimple.com/v1",
-		Http:  &http.Client{},
+		Http:  cleanhttp.DefaultClient(),
 	}
 	return &client, nil
 }
@@ -64,7 +66,7 @@ func NewClientWithDomainToken(domainToken string) (*Client, error) {
 	client := Client{
 		DomainToken: domainToken,
 		URL:         "https://api.dnsimple.com/v1",
-		Http:        &http.Client{},
+		Http:        cleanhttp.DefaultClient(),
 	}
 	return &client, nil
 }
