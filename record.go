@@ -48,6 +48,7 @@ type ChangeRecord struct {
 	Value string // where the record points
 	Type  string // type, i.e a, mx
 	Ttl   string // TTL of record
+	Prio  string // Priority of record - only relevant for some record types
 }
 
 // CreateRecord creates a record from the parameters specified and
@@ -67,6 +68,14 @@ func (c *Client) CreateRecord(domain string, opts *ChangeRecord) (string, error)
 			return "", nil
 		}
 		params["ttl"] = ttl
+	}
+
+	if opts.Prio != "" {
+		prio, err := strconv.ParseInt(opts.Prio, 0, 0)
+		if err != nil {
+			return "", fmt.Errorf("Error parsing prio: %s", err.Error())
+		}
+		params["prio"] = prio
 	}
 
 	endpoint := fmt.Sprintf("/domains/%s/records", domain)
@@ -117,6 +126,14 @@ func (c *Client) UpdateRecord(domain string, id string, opts *ChangeRecord) (str
 			return "", nil
 		}
 		params["ttl"] = ttl
+	}
+
+	if opts.Prio != "" {
+		prio, err := strconv.ParseInt(opts.Prio, 0, 0)
+		if err != nil {
+			return "", fmt.Errorf("Error parsing prio: %s", err.Error())
+		}
+		params["prio"] = prio
 	}
 
 	endpoint := fmt.Sprintf("/domains/%s/records/%s", domain, id)
