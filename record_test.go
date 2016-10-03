@@ -39,6 +39,8 @@ func (s *S) Test_CreateRecord(c *C) {
 
 	opts := ChangeRecord{
 		Name: "foobar",
+		Ttl:  "300",
+		Prio: "10",
 	}
 
 	id, err := s.client.CreateRecord("example.com", &opts)
@@ -54,6 +56,8 @@ func (s *S) Test_UpdateRecord(c *C) {
 
 	opts := ChangeRecord{
 		Name: "foobar",
+		Ttl:  "300",
+		Prio: "10",
 	}
 
 	id, err := s.client.UpdateRecord("example.com", "25", &opts)
